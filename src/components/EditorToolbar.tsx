@@ -30,6 +30,7 @@ import {
   toggleVibrato,
   setDynamic,
   toggleHairpin,
+  toggleGrace,
   type BendKind,
   type Caret,
 } from '../engine/edit';
@@ -187,6 +188,7 @@ export default function EditorToolbar(p: Props) {
             {() => (
               <div className="ed-list">
                 {[
+                  ['Grace note (F)', !!note?.grace, toggleGrace],
                   ['Natural harmonic', note?.harmonic, toggleHarmonic],
                   ['Slide in from below', note?.slide?.inBelow, ((s, t, c) => toggleSlide(s, t, c, 'inBelow')) as EditOp],
                   ['Slide in from above', note?.slide?.inAbove, ((s, t, c) => toggleSlide(s, t, c, 'inAbove')) as EditOp],
@@ -208,6 +210,7 @@ export default function EditorToolbar(p: Props) {
         </div>
       )}
       <div className="ed-group" aria-label="Note style">
+        {drums && noteButton('Flam', 'Flam: a grace stroke just before the hit', !!note?.grace, toggleGrace, 'F')}
         {!drums && noteButton('x', 'Dead note', note?.dead, (s, t, c) => toggleNoteFlag(s, t, c, 'dead'), 'X')}
         {noteButton('( )', 'Ghost note', note?.ghost, (s, t, c) => toggleNoteFlag(s, t, c, 'ghost'), 'G')}
         {noteButton('>', 'Accent', note?.accent, (s, t, c) => toggleNoteFlag(s, t, c, 'accent'), 'A')}

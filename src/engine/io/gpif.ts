@@ -316,7 +316,7 @@ function readVoice(
     if (props.has('WhammyBar')) beat.tremoloBar = whammy(props);
 
     for (const g of pendingGrace) {
-      const target = beat.notes.find((n) => n.string === g.string);
+      const target = beat.notes.find((n) => (rt.track.isPercussion ? n.midi === g.midi : n.string === g.string)) ?? (rt.track.isPercussion ? beat.notes[0] : undefined);
       if (target) target.grace = g.grace;
     }
     pendingGrace = [];

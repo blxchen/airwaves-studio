@@ -25,6 +25,7 @@ import {
   toggleTriplet,
   toggleVibrato,
   toggleHairpin,
+  toggleGrace,
   type Caret,
 } from '../engine/edit';
 import { useTabPlayer } from '../player/usePlayer';
@@ -68,6 +69,7 @@ const EDIT_SHORTCUTS: [string, string][] = [
   ['B', 'Full bend on / off'],
   ['X G A', 'Dead note, ghost note, accent'],
   ['< / >', 'Crescendo / decrescendo'],
+  ['F', 'Flam (drums) / grace note'],
   ['Ctrl+Z / Y', 'Undo / redo'],
   ['Ctrl+S', 'Save'],
   ['Esc', 'Stop editing'],
@@ -419,6 +421,9 @@ export default function PlayerView({ songId, startEditing = false }: { songId: s
         return true;
       case 'a':
         apply(flag('accent'));
+        return true;
+      case 'f':
+        apply(toggleGrace);
         return true;
       case '<':
         apply((s, t, c) => toggleHairpin(s, t, c, 'cresc'));

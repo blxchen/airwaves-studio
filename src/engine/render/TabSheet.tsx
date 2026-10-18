@@ -316,6 +316,18 @@ function beatElements(layout: SheetLayout, system: SystemLayout, m: MeasureLayou
         } else {
           children.push(<ellipse key={`${id}h${i}`} className="drumhead" cx={x} cy={y} rx={4.3} ry={3.2} transform={`rotate(-20 ${x} ${y})`} />);
         }
+        if (n.grace) {
+          // Flam: a small grace notehead in front, with a slashed stem.
+          const [gStep, gHead] = drumPos(n.grace.fret || n.midi);
+          const gx = x - 12;
+          const gy = yOf(gStep);
+          if (gHead === 'x') children.push(<path key={`${id}gh${i}`} className="drumx grace" d={`M${gx - 2.4} ${gy - 2.4}L${gx + 2.4} ${gy + 2.4}M${gx - 2.4} ${gy + 2.4}L${gx + 2.4} ${gy - 2.4}`} />);
+          else children.push(<ellipse key={`${id}gh${i}`} className="drumhead" cx={gx} cy={gy} rx={2.9} ry={2.1} transform={`rotate(-20 ${gx} ${gy})`} />);
+          children.push(
+            <line key={`${id}gs${i}`} className="stem" x1={gx + 2.7} x2={gx + 2.7} y1={gy} y2={gy - 13} />,
+            <line key={`${id}gl${i}`} className="stem" x1={gx - 1} x2={gx + 6.5} y1={gy - 5} y2={gy - 10} />,
+          );
+        }
       }
       // Stem up to the beam line.
       if (beat.value >= 2) {
@@ -345,6 +357,13 @@ function beatElements(layout: SheetLayout, system: SystemLayout, m: MeasureLayou
         {label}
       </text>,
     );
+    if (n.grace) {
+      children.push(
+        <text key={`${id}gr${i}`} className="grace-fret" x={x - w / 2 - 3} y={y + 3.5} textAnchor="end">
+          {n.grace.dead ? 'x' : n.grace.fret}
+        </text>,
+      );
+    }
     if (n.slide && (n.slide.inBelow || n.slide.inAbove)) {
       const dy = n.slide.inBelow ? 1 : -1;
       children.push(<line key={`${id}si${i}`} className="fx-line" x1={x - w / 2 - 9} y1={y + 4 * dy} x2={x - w / 2 - 2} y2={y - 1 * dy} />);

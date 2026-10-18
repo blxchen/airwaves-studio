@@ -90,7 +90,7 @@ function naturalMeasure(header: MeasureHeader, track: Track, showTime: boolean, 
     // Long fret labels like "(12)" or "<12>" need room.
     let widest = 1;
     for (const voice of measure?.voices ?? []) {
-      for (const b of voice.beats) if (b.start === tick) for (const n of b.notes) widest = Math.max(widest, fretLabel(n, drums).length);
+      for (const b of voice.beats) if (b.start === tick) for (const n of b.notes) widest = Math.max(widest, fretLabel(n, drums).length + (n.grace ? 2 : 0));
     }
     return { tick, width: Math.max(slotWidth(next - tick), 10 + widest * 8) };
   });

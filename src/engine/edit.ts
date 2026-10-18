@@ -464,3 +464,16 @@ export function toggleHairpin(_song: Song, track: Track, c: Caret, kind: 'cresc'
   const beat = beatAt(track, c);
   if (beat) beat.hairpin = beat.hairpin === kind ? null : kind;
 }
+
+// Drums: a flam (grace stroke on the same drum). Other tracks: a grace note two frets below.
+export function toggleGrace(_song: Song, track: Track, c: Caret) {
+  const note = noteAt(track, c);
+  if (!note) return;
+  if (note.grace) {
+    note.grace = null;
+    return;
+  }
+  note.grace = track.isPercussion
+    ? { fret: note.midi ?? note.fret, duration: 60, dead: false, onBeat: false, transition: 'none' }
+    : { fret: Math.max(0, note.fret - 2), duration: 120, dead: false, onBeat: false, transition: 'hammer' };
+}

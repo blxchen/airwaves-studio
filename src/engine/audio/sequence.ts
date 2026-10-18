@@ -187,6 +187,11 @@ function trackEvents(song: Song, track: Track, order: PlayedMeasure[]): NoteEven
           }
 
           // Grace notes are squeezed in just before the beat.
+          if (note.grace && drums) {
+            // Flam: a quieter grace stroke a few milliseconds ahead of the main hit.
+            const gLen = Math.min(note.grace.duration, 60);
+            out.push({ ...ev, tick: Math.max(0, start - gLen), end: start, key: note.grace.fret || key, velocity: ev.velocity * 0.5, pitch: [] });
+          }
           if (note.grace && !drums) {
             const g = note.grace;
             const gLen = Math.min(g.duration, 120);

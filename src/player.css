@@ -1052,3 +1052,10 @@
   font: 500 12px/1 Inter, 'Segoe UI', sans-serif;
   fill: var(--ink);
 }
+.system .grace-fret {
+  font: 600 10px/1 Inter, 'Segoe UI', sans-serif;
+  fill: var(--ink);
+}
+.system .drumx.grace {
+  stroke-width: 1.2;
+}
