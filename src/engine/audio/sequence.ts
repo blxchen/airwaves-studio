@@ -12,6 +12,7 @@ export interface NoteEvent {
   end: number; // timeline tick of note-off
   track: number;
   program: number; // instrument in effect for this note
+  offset?: number; // seconds relative to the tick (flam grace strokes play slightly early)
   key: number;
   velocity: number;
   pitch: PitchTick[];
@@ -188,9 +189,10 @@ function trackEvents(song: Song, track: Track, order: PlayedMeasure[]): NoteEven
 
           // Grace notes are squeezed in just before the beat.
           if (note.grace && drums) {
-            // Flam: a quieter grace stroke a few milliseconds ahead of the main hit.
-            const gLen = Math.min(note.grace.duration, 60);
-            out.push({ ...ev, tick: Math.max(0, start - gLen), end: start, key: note.grace.fret || key, velocity: ev.velocity * 0.5, pitch: [] });
+            // Flam: a soft grace stroke a fixed ~28 ms before the main hit (real flam
+            // spacing doesn't change with tempo), with the main stroke slightly accented.
+            out.push({ ...ev, end: start + 60, key: note.grace.fret || key, velocity: Math.max(20, ev.velocity * 0.4), pitch: [], offset: -0.028 });
+            ev.velocity = Math.min(127, ev.velocity * 1.08);
           }
           if (note.grace && !drums) {
             const g = note.grace;

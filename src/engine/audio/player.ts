@@ -388,7 +388,8 @@ export class Player {
     }
   }
 
-  private playEvent(ev: NoteEvent, time: number) {
+  private playEvent(ev: NoteEvent, scheduled: number) {
+    const time = scheduled + (ev.offset ?? 0);
     const song = this.song!;
     const track = song.tracks[ev.track];
     const bus = this.buses[ev.track];
